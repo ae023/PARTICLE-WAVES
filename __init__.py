@@ -11,7 +11,7 @@ bl_info = {
 import bpy # type: ignore
 
 from .props import ParticleWavesSettings
-from .operators import PARTICLEWAVES_OT_Rebuild, PARTICLEWAVES_OT_Remove, PARTICLEWAVES_OT_AgeWave, PARTICLEWAVES_OT_SetPreset
+from .operators import PARTICLEWAVES_OT_Rebuild, PARTICLEWAVES_OT_Remove, PARTICLEWAVES_OT_AgeWave, PARTICLEWAVES_OT_SetPreset, PARTICLEWAVES_OT_RandomiseParams
 from .ui import PARTICLEWAVES_PT_MainPanel
 
 classes = [
@@ -20,6 +20,7 @@ classes = [
     PARTICLEWAVES_OT_Remove,
     PARTICLEWAVES_OT_AgeWave,
     PARTICLEWAVES_OT_SetPreset,
+    PARTICLEWAVES_OT_RandomiseParams,
     PARTICLEWAVES_PT_MainPanel,
 ]
 

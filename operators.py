@@ -1,4 +1,5 @@
 import bpy # type: ignore
+import random # type: ignore
 from .core import create_particle_wave, register_wave_animation_handler, unregister_wave_animation_handler, advect_points
 
 class PARTICLEWAVES_OT_Rebuild(bpy.types.Operator):
@@ -43,6 +44,24 @@ class PARTICLEWAVES_OT_AgeWave(bpy.types.Operator):
             scene.frame_set(frame)
             advect_points(scene)
         scene.frame_set(end)
+        return {'FINISHED'}
+    
+class PARTICLEWAVES_OT_RandomiseParams(bpy.types.Operator):
+    bl_idname = "particlewaves.randomise_params"
+    bl_label = "Randomise System Parameters"
+    bl_description = "Randomly set system parameters for creative exploration"
+
+    def execute(self, context):
+        s = context.scene.particlewaves_settings
+        s.NUM_MODES = random.randint(1, 32)
+        s.FREQ_BASE = random.uniform(0.1, 10.0)
+        s.MOVE_SPEED = random.uniform(0.001, 0.2)
+        s.ATTRACT_GAIN = random.uniform(0.0, 2.0)
+        s.ALONG_GAIN = random.uniform(0.0, 2.0)
+        s.DIFFUSION = random.uniform(0.0, 0.02)
+        s.VEL_SMOOTH = random.uniform(0.5, 0.999)
+        s.STEP_CLAMP = random.uniform(0.0001, 0.02)
+        s.SOFTNESS = random.uniform(0.01, 5.0)
         return {'FINISHED'}
 
 class PARTICLEWAVES_OT_SetPreset(bpy.types.Operator):

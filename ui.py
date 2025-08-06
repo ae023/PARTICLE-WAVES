@@ -1,11 +1,11 @@
 import bpy # type: ignore
 
 class PARTICLEWAVES_PT_MainPanel(bpy.types.Panel):
-    bl_label = "PARTICLE WAVES CONTROLS"
+    bl_label = "PARTICLE WAVE SETTINGS"
     bl_idname = "PARTICLEWAVES_PT_MAIN"
     bl_space_type = 'VIEW_3D'
     bl_region_type = 'UI'
-    bl_category = "PARTICLEWAVES"
+    bl_category = "PARTICLE WAVES"
 
     def draw(self, context):
         layout = self.layout
@@ -13,30 +13,37 @@ class PARTICLEWAVES_PT_MainPanel(bpy.types.Panel):
 
         # PARTICLE SETTINGS
         box = layout.box()
-        box.label(text="PARTICLES")
-        box.prop(settings, "PARTICLE_COUNT", text="COUNT")
-        box.prop(settings, "PARTICLE_RADIUS", text="RADIUS")
-        box.prop(settings, "SPHERE_RADIUS", text="FIELD")
+        box.label(text="PARTICLE SETTINGS")
+        box.prop(settings, "PARTICLE_COUNT")
+        box.prop(settings, "PARTICLE_RADIUS")
+        box.prop(settings, "SPHERE_RADIUS")
+
+        layout.separator()
 
         # WAVE SETTINGS
         box = layout.box()
-        box.label(text="WAVES")
-        box.prop(settings, "WAVE_STRENGTH", text="AMPLITUDE")
-        box.prop(settings, "WAVE_SPEED", text="PHASE")
-        box.prop(settings, "SEED", text="SEED")
+        box.label(text="WAVE SETTINGS")
+        box.prop(settings, "WAVE_STRENGTH")
+        box.prop(settings, "WAVE_SPEED")
+        box.prop(settings, "SEED")
+
+        layout.separator()
 
         # SYSTEM PARAMETERS
         box = layout.box()
         box.label(text="SYSTEM PARAMETERS")
-        box.prop(settings, "NUM_MODES", text="BAND COUNT")
-        box.prop(settings, "FREQ_BASE", text="BASE FREQUENCY")
-        box.prop(settings, "MOVE_SPEED", text="DRIFT SPEED")
-        box.prop(settings, "ATTRACT_GAIN", text="ATTRACT GAIN")
-        box.prop(settings, "ALONG_GAIN", text="TANGENTIAL GAIN")
-        box.prop(settings, "DIFFUSION", text="DIFFUSION")
-        box.prop(settings, "VEL_SMOOTH", text="VELOCITY SMOOTHING")
-        box.prop(settings, "STEP_CLAMP", text="STEP LIMIT")
-        box.prop(settings, "SOFTNESS", text="SOFTENING")
+        box.prop(settings, "NUM_MODES")
+        box.prop(settings, "FREQ_BASE")
+        box.prop(settings, "MOVE_SPEED")
+        box.prop(settings, "ATTRACT_GAIN")
+        box.prop(settings, "ALONG_GAIN")
+        box.prop(settings, "DIFFUSION")
+        box.prop(settings, "VEL_SMOOTH")
+        box.prop(settings, "STEP_CLAMP")
+        box.prop(settings, "SOFTNESS")
+        box.operator("particlewaves.randomise_params", text="RANDOMISE SYSTEM PARAMETERS", icon='RNDCURVE')
+
+        layout.separator()
 
         # PRESETS
         box = layout.box()
@@ -44,15 +51,19 @@ class PARTICLEWAVES_PT_MainPanel(bpy.types.Panel):
         box.prop(settings, "WAVE_PRESET", text="")
         box.operator("particlewaves.set_preset", text="APPLY").preset = settings.WAVE_PRESET
 
-        # ACTIONS
+        layout.separator()
+
+        # ACTIONS (side by side)
         box = layout.box()
         box.label(text="ACTIONS")
-        box.operator("particlewaves.rebuild", text="GENERATE", icon='FILE_REFRESH')
-        box.operator("particlewaves.remove", text="DESTROY", icon='TRASH')
+        row = box.row(align=True)
+        row.operator("particlewaves.rebuild", text="GENERATE", icon='FILE_REFRESH')
+        row.operator("particlewaves.remove", text="DESTROY", icon='TRASH')
 
-        # PHASE ADVANCE
         layout.separator()
-        layout.label(text="PHASE ADVANCE", icon='TIME')
+
+        # PHASE ADVANCE (unchanged)
+        layout.label(text="PHASE ADVANCE")
         row = layout.row(align=True)
         row.operator("particlewaves.age_wave", text="Φ+10").seconds = 10
         row.operator("particlewaves.age_wave", text="Φ+20").seconds = 20
