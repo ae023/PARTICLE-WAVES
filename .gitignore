@@ -1,0 +1,11 @@
+__pycache__/
+*.py[cod]
+*$py.class
+*.blend1
+*.blend2
+.DS_Store
+venv/
+env/
+*.mov
+.vscode/
+notes.txt

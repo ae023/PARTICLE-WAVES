@@ -12,3 +12,5 @@ git commit -m "Initial clean commit: Blender Particle Waves addon"
 git branch -M main
 git remote add origin https://github.com/ae023/PARTICLE-WAVES.git
 git push -u origin main
+
+ln -s "/Users/ae.home/Documents/Desktop - Erin’s MacBook Pro (2)/UAL/COMPUTATIONAL ARTS/SUMMER-25/POINTCLOUD/POINTCLOUD" ~/Library/Application\ Support/Blender/4.3/scripts/addons/POINTCLOUD
