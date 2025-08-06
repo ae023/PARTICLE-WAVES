@@ -41,7 +41,7 @@ class PARTICLEWAVES_PT_MainPanel(bpy.types.Panel):
         box.prop(settings, "VEL_SMOOTH")
         box.prop(settings, "STEP_CLAMP")
         box.prop(settings, "SOFTNESS")
-        box.operator("particlewaves.randomise_params", text="RANDOMISE SYSTEM PARAMETERS", icon='RNDCURVE')
+        box.operator("particlewaves.randomise_params", text="RANDOMISE SYSTEM PARAMETERS")
 
         layout.separator()
 
