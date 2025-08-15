@@ -10,19 +10,15 @@ from .core import (
     remove_obj_and_mesh,
 )
 
-
 # HELPERS
 def _get_settings(context) -> Optional[bpy.types.PropertyGroup]:
     # RETURN THE ADD-ON SETTINGS OR NONE IF MISSING.
     return getattr(context.scene, "particlewaves_settings", None)
 
-
 def _handler_active() -> bool:
     return advect_points in bpy.app.handlers.frame_change_pre
 
-
 # OPERATORS
-
 class PARTICLEWAVES_OT_Rebuild(bpy.types.Operator):
     # CREATE OR REFRESH THE PARTICLE WAVE SYSTEM.
     bl_idname = "particlewaves.rebuild"
@@ -39,7 +35,6 @@ class PARTICLEWAVES_OT_Rebuild(bpy.types.Operator):
         register_wave_animation_handler()
         self.report({'INFO'}, "Particle Waves generated.")
         return {'FINISHED'}
-
 
 class PARTICLEWAVES_OT_Remove(bpy.types.Operator):
     # REMOVE OBJECTS AND STOP THE ANIMATION HANDLER.
@@ -130,32 +125,36 @@ class PARTICLEWAVES_OT_SetPreset(bpy.types.Operator):
             return {'CANCELLED'}
 
         if self.preset == 'DEFAULT':
-            s.NUM_MODES = 4; s.FREQ_BASE = 1.2; s.MOVE_SPEED = 0.07
-            s.ATTRACT_GAIN = 0.6; s.ALONG_GAIN = 0.7; s.DIFFUSION = 0.001
+            s.NUM_MODES = 5;   s.FREQ_BASE = 1.4;  s.MOVE_SPEED = 0.07
+            s.ATTRACT_GAIN = 0.70; s.ALONG_GAIN = 0.70; s.DIFFUSION = 0.0010
             s.VEL_SMOOTH = 0.97; s.STEP_CLAMP = 0.0012; s.SOFTNESS = 0.6
+            s.AXIS_BIAS = (0.0, 0.0, 0.0)
         elif self.preset == 'RIPPLES':
-            s.NUM_MODES = 6; s.FREQ_BASE = 2.0; s.MOVE_SPEED = 0.03
-            s.ATTRACT_GAIN = 0.9; s.ALONG_GAIN = 0.3; s.DIFFUSION = 0.0003
-            s.VEL_SMOOTH = 0.98; s.STEP_CLAMP = 0.0008; s.SOFTNESS = 0.3
+            s.NUM_MODES = 7;   s.FREQ_BASE = 2.0;  s.MOVE_SPEED = 0.03
+            s.ATTRACT_GAIN = 0.85; s.ALONG_GAIN = 0.30; s.DIFFUSION = 0.0002
+            s.VEL_SMOOTH = 0.99; s.STEP_CLAMP = 0.0008; s.SOFTNESS = 0.3
+            s.AXIS_BIAS = (0.0, 0.0, 0.0)
         elif self.preset == 'CHAOS':
-            s.NUM_MODES = 8; s.FREQ_BASE = 1.5; s.MOVE_SPEED = 0.15
-            s.ATTRACT_GAIN = 0.3; s.ALONG_GAIN = 1.2; s.DIFFUSION = 0.005
-            s.VEL_SMOOTH = 0.93; s.STEP_CLAMP = 0.002; s.SOFTNESS = 0.9
+            s.NUM_MODES = 10;  s.FREQ_BASE = 1.6;  s.MOVE_SPEED = 0.14
+            s.ATTRACT_GAIN = 0.40; s.ALONG_GAIN = 1.10; s.DIFFUSION = 0.0040
+            s.VEL_SMOOTH = 0.94; s.STEP_CLAMP = 0.0020; s.SOFTNESS = 0.9
+            s.AXIS_BIAS = (0.0, 0.0, 0.0)
         elif self.preset == 'BANDS':
-            s.NUM_MODES = 3; s.FREQ_BASE = 0.8; s.MOVE_SPEED = 0.05
-            s.ATTRACT_GAIN = 0.8; s.ALONG_GAIN = 0.4; s.DIFFUSION = 0.0005
-            s.VEL_SMOOTH = 0.99; s.STEP_CLAMP = 0.001; s.SOFTNESS = 0.2
+            s.NUM_MODES = 3;   s.FREQ_BASE = 0.9;  s.MOVE_SPEED = 0.05
+            s.ATTRACT_GAIN = 0.85; s.ALONG_GAIN = 0.35; s.DIFFUSION = 0.0003
+            s.VEL_SMOOTH = 0.99; s.STEP_CLAMP = 0.0010; s.SOFTNESS = 0.2
+            s.AXIS_BIAS = (0.0, 0.0, 0.35)  # subtle equatorial/polar bias
         elif self.preset == 'SOFT':
-            s.NUM_MODES = 5; s.FREQ_BASE = 1.0; s.MOVE_SPEED = 0.04
-            s.ATTRACT_GAIN = 0.7; s.ALONG_GAIN = 0.6; s.DIFFUSION = 0.0007
-            s.VEL_SMOOTH = 0.98; s.STEP_CLAMP = 0.001; s.SOFTNESS = 1.0
+            s.NUM_MODES = 5;   s.FREQ_BASE = 1.1;  s.MOVE_SPEED = 0.04
+            s.ATTRACT_GAIN = 0.65; s.ALONG_GAIN = 0.60; s.DIFFUSION = 0.0007
+            s.VEL_SMOOTH = 0.99; s.STEP_CLAMP = 0.0010; s.SOFTNESS = 1.2
+            s.AXIS_BIAS = (0.0, 0.0, 0.0)
         else:
             self.report({'WARNING'}, f"Unknown preset: {self.preset}")
             return {'CANCELLED'}
 
         self.report({'INFO'}, f"Preset applied: {self.preset}")
         return {'FINISHED'}
-
 
 class PARTICLEWAVES_OT_NewVariation(bpy.types.Operator):
     # QUICKLY GET A FRESH LOOK: RESEED + REBUILD (KEEPS CURRENT SETTINGS).

@@ -60,7 +60,7 @@ class ParticleWavesSettings(bpy.types.PropertyGroup):
         max=999999,
     )
 
-    # --- Field structure ---
+    # FIELD STRUCTURE
     NUM_MODES: bpy.props.IntProperty(  # type: ignore
         name="BAND COUNT",
         description="Number of wave modes (higher = more complex interference)",
@@ -163,11 +163,11 @@ class ParticleWavesSettings(bpy.types.PropertyGroup):
         name="WAVE PRESET",
         description="Choose a preset for wave patterns",
         items=[
-            ('DEFAULT', "DEFAULT", ""),
-            ('RIPPLES', "RIPPLES", ""),
-            ('CHAOS', "CHAOS", ""),
-            ('BANDS', "BANDS", ""),
-            ('SOFT', "SOFT", ""),
+            ('DEFAULT', "DEFAULT", "Balanced starter. A bit of banding, a bit of flow; good for quick tests and neutral looks."),
+            ('RIPPLES', "RIPPLES", "Crisp interference rings. Sharp, legible bands with minimal fuzz; high contrast structure."),
+            ('CHAOS', "CHAOS", "Turbulent filaments. Busy, lively microstructure with broken ribbons and swirls."),
+            ('BANDS', "BANDS", "Broad belts with negative space. Large-scale, readable stripes and clear poles/equator."),
+            ('SOFT', "SOFT", "Hazy drift. Gentle, continuous motion with rounded edges and low visual tension."),
         ],
         default='DEFAULT',
     )
