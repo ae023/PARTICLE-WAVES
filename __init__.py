@@ -59,13 +59,13 @@ def _gather_classes():
     for name in (
         "PARTICLEWAVES_PT_MainPanel",
         "POINTCLOUD_PT_MainPanel",     # fallback if you used another prefix
+        "PARTICLEWAVES_PT_Presets",
         "PARTICLEWAVES_PT_Particle",
         "PARTICLEWAVES_PT_Wave",
         "PARTICLEWAVES_PT_System",
         "PARTICLEWAVES_PT_Advanced",
-        "PARTICLEWAVES_PT_Presets",    # optional
         "PARTICLEWAVES_PT_PresetsHint",# optional
-        "PARTICLEWAVES_PT_PhaseAdvance",# optional
+        "PARTICLEWAVES_PT_PhaseAdvance",# optional 
     ):
         cls = _maybe(ui, name)
         if cls and cls not in cls_list:

@@ -4,6 +4,9 @@ def _settings(ctx):
     return getattr(ctx.scene, "particlewaves_settings", None)
 
 
+# ─────────────────────────────────────────────────────────
+# Parent container panel (MODE lives here; not collapsible)
+# ─────────────────────────────────────────────────────────
 class PARTICLEWAVES_PT_MainPanel(bpy.types.Panel):
     bl_label = "PARTICLE WAVE SETTINGS"
     bl_idname = "PARTICLEWAVES_PT_MAIN"
@@ -15,39 +18,37 @@ class PARTICLEWAVES_PT_MainPanel(bpy.types.Panel):
         layout = self.layout
         s = _settings(context)
 
-        # COMPACT HEADER (NO SPLIT LABELS)
+        # MODE (non-collapsible, no box)
+        layout.label(text="MODE")
         layout.use_property_split = False
         layout.use_property_decorate = False
 
-        header = layout.box()
-
-        # LINE 1 — PRESET TITLE
-        header.label(text="PRESET")
-
-        # LINE 2 — DROPDOWN | GEN | REGEN | DESTROY (ICON-ONLY)
-        row = header.row(align=True)
+        # Row 1 — dropdown (fills width)
+        row = layout.row(align=True)
         if s is None:
-            row.label(text="Settings missing. Re-enable add-on.", icon='ERROR')
+            row.label(text="Generate first.", icon='INFO')
         else:
             row.prop(s, "WAVE_PRESET", text="")
 
-        # CHOOSE BEST GEN ACTION AVAILABLE
-        gen_op_id = ("particlewaves.apply_preset_generate"
-                     if hasattr(bpy.ops.particlewaves, "apply_preset_generate")
-                     else "particlewaves.rebuild")
+        # Row 2 — Generate | Regenerate | Destroy
+        row = layout.row(align=True)
+        gen_op = ("particlewaves.apply_preset_generate"
+                  if hasattr(bpy.ops.particlewaves, "apply_preset_generate")
+                  else "particlewaves.rebuild")
+        row.operator(gen_op,                     text="GENERATE")
+        row.operator("particlewaves.new_variation", text="REGENERATE")
+        row.operator("particlewaves.remove",        text="DESTROY")
 
-        row.operator(gen_op_id,                     text="", icon='FILE_REFRESH')  # GEN
-        row.operator("particlewaves.new_variation", text="", icon='RNDCURVE')      # REGEN
-        row.operator("particlewaves.remove",        text="", icon='TRASH')         # DESTROY
-
-        # Line 3 — Phase advance
-        row = header.row(align=True)
-        for sec in (10, 20, 30):
-            op = row.operator("particlewaves.age_wave", text=f"Φ +{sec}s", icon='FRAME_NEXT')
+        # Row 3 — phase advance
+        row = layout.row(align=True)
+        for sec in (10, 20, 30, 40, 50, 60):
+            op = row.operator("particlewaves.age_wave", text=f"Φ +{sec}")
             op.seconds = sec
 
 
-# ---------- SUB-PANELS (SINGLE COLUMN, COLLAPSIBLE) ----------
+# ─────────────────────────────────────────────────────────
+# Sub-panels (collapsible), ordered under Main
+# ─────────────────────────────────────────────────────────
 class _PW_Sub(bpy.types.Panel):
     bl_space_type = 'VIEW_3D'
     bl_region_type = 'UI'
@@ -55,7 +56,8 @@ class _PW_Sub(bpy.types.Panel):
 
     @staticmethod
     def _s(layout, context):
-        layout.use_property_split = True
+        # Match your current look (no split labels)
+        layout.use_property_split = False
         layout.use_property_decorate = False
         s = _settings(context)
         if s is None:
@@ -64,8 +66,9 @@ class _PW_Sub(bpy.types.Panel):
 
 
 class PARTICLEWAVES_PT_Particle(_PW_Sub):
-    bl_label = "Particle"
+    bl_label = "PARTICLE SETTINGS"
     bl_idname = "PARTICLEWAVES_PT_PARTICLE"
+    bl_order = 10
     def draw(self, context):
         layout = self.layout
         s = self._s(layout, context);  
@@ -77,8 +80,9 @@ class PARTICLEWAVES_PT_Particle(_PW_Sub):
 
 
 class PARTICLEWAVES_PT_Wave(_PW_Sub):
-    bl_label = "Wave"
+    bl_label = "WAVE SETTINGS"
     bl_idname = "PARTICLEWAVES_PT_WAVE"
+    bl_order = 20
     def draw(self, context):
         layout = self.layout
         s = self._s(layout, context);  
@@ -90,8 +94,9 @@ class PARTICLEWAVES_PT_Wave(_PW_Sub):
 
 
 class PARTICLEWAVES_PT_System(_PW_Sub):
-    bl_label = "System"
+    bl_label = "SYSTEM SETTINGS"
     bl_idname = "PARTICLEWAVES_PT_SYSTEM"
+    bl_order = 30
     def draw(self, context):
         layout = self.layout
         s = self._s(layout, context);  
@@ -106,13 +111,14 @@ class PARTICLEWAVES_PT_System(_PW_Sub):
         col.prop(s, "VEL_SMOOTH")
         col.prop(s, "STEP_CLAMP")
         col.prop(s, "SOFTNESS")
-        layout.operator("particlewaves.randomise_params", text="Randomise System Parameters", icon='RNDCURVE')
+        layout.operator("particlewaves.randomise_params", text="RANDOMISE")
 
 
 class PARTICLEWAVES_PT_Advanced(_PW_Sub):
-    bl_label = "Advanced"
+    bl_label = "ADVANCED SETTINGS"
     bl_idname = "PARTICLEWAVES_PT_ADVANCED"
-    bl_options = {'DEFAULT_CLOSED'}  # COLLAPSED BY DEFAULT
+    bl_order = 40
+    bl_options = {'DEFAULT_CLOSED'}
     def draw(self, context):
         layout = self.layout
         s = self._s(layout, context);  
